@@ -88,3 +88,70 @@ export async function topMerchantsHandler(req: Request, res: Response) {
     }))
   });
 }
+
+export async function transactionsHandler(req: Request, res: Response) {
+  const range = String(req.query.range ?? "30d");
+  const today = new Date();
+  const from = getRangeStart(range, today);
+
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      userId: req.user!.id,
+      date: { gte: from, lte: today }
+    },
+    orderBy: { date: "desc" },
+    take: 500,
+    select: {
+      id: true,
+      merchantName: true,
+      name: true,
+      amount: true,
+      date: true,
+      categoryPrimary: true,
+      pending: true,
+      account: {
+        select: {
+          name: true,
+          mask: true
+        }
+      }
+    }
+  });
+
+  res.json({
+    transactions: transactions.map((transaction) => ({
+      id: transaction.id,
+      merchant: transaction.merchantName ?? transaction.name,
+      name: transaction.name,
+      amount: Number(transaction.amount),
+      date: transaction.date.toISOString(),
+      category: transaction.categoryPrimary,
+      pending: transaction.pending,
+      accountName: transaction.account.name,
+      accountMask: transaction.account.mask
+    }))
+  });
+}
+
+function getRangeStart(range: string, today: Date) {
+  const start = new Date(today);
+  start.setUTCHours(0, 0, 0, 0);
+
+  if (range === "this_month") {
+    start.setUTCDate(1);
+    return start;
+  }
+
+  if (range === "ytd") {
+    start.setUTCMonth(0, 1);
+    return start;
+  }
+
+  if (range === "1y") {
+    start.setUTCFullYear(start.getUTCFullYear() - 1);
+    return start;
+  }
+
+  start.setUTCDate(start.getUTCDate() - 30);
+  return start;
+}

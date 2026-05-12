@@ -14,18 +14,21 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     setLoading(true);
     setError("");
+    setStatus("Signing you in...");
     try {
       await login(email, password);
+      setStatus("Signed in successfully. Loading your dashboard...");
       router.push("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to log in");
-    } finally {
+      setStatus("");
       setLoading(false);
     }
   }
@@ -38,6 +41,7 @@ export function LoginForm() {
           <p className="mt-1 text-sm text-muted">Continue to your rewards dashboard.</p>
         </div>
         {error ? <Toast message={error} tone="error" /> : null}
+        {status ? <Toast message={status} tone="success" /> : null}
         <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Input
           type="password"

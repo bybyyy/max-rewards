@@ -32,6 +32,38 @@ export async function login(email: string, password: string) {
   return toSafeUser(user);
 }
 
+export async function updateProfile(userId: string, data: { email?: string; name?: string | null }) {
+  if (data.email) {
+    const existing = await prisma.user.findUnique({ where: { email: data.email } });
+    if (existing && existing.id !== userId) {
+      throw new HttpError(409, "Email is already registered");
+    }
+  }
+
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      ...(data.email ? { email: data.email } : {}),
+      ...(data.name !== undefined ? { name: data.name } : {})
+    }
+  });
+
+  return toSafeUser(user);
+}
+
+export async function changePassword(userId: string, currentPassword: string, newPassword: string) {
+  const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
+  const matches = await bcrypt.compare(currentPassword, user.passwordHash);
+  if (!matches) {
+    throw new HttpError(401, "Current password is incorrect");
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { passwordHash: await bcrypt.hash(newPassword, 12) }
+  });
+}
+
 export function createSessionToken(user: { id: string; email: string; role: string }) {
   return jwt.sign({ id: user.id, email: user.email, role: user.role }, env.JWT_SECRET, {
     expiresIn: "7d"

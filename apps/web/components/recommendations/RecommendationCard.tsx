@@ -12,6 +12,8 @@ export type Recommendation = {
   signupBonusValue: number;
   annualFee: number;
   estimatedNetValue: number;
+  preferenceScore?: number;
+  rankingScore?: number;
   categoryBreakdown: CategoryBreakdown[];
   reasoning: string[];
 };
@@ -33,10 +35,13 @@ export function RecommendationCard({ recommendation, rank }: { recommendation: R
           <p className="text-2xl font-semibold">{formatCurrency(recommendation.estimatedNetValue)}</p>
         </div>
       </div>
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Gross rewards" value={formatCurrency(recommendation.estimatedGrossRewards)} />
         <Stat label="Signup bonus" value={formatCurrency(recommendation.signupBonusValue)} />
         <Stat label="Annual fee" value={formatCurrency(recommendation.annualFee)} />
+        {recommendation.preferenceScore ? (
+          <Stat label="Preference weight" value={formatCurrency(recommendation.preferenceScore)} />
+        ) : null}
       </div>
       <ul className="mt-4 space-y-2 text-sm text-muted">
         {recommendation.reasoning.map((reason) => (

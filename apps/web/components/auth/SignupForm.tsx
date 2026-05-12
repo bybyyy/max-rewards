@@ -15,18 +15,21 @@ export function SignupForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     setLoading(true);
     setError("");
+    setStatus("Creating your account...");
     try {
       await signup(email, password, name || undefined);
+      setStatus("Account created. Loading your dashboard...");
       router.push("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to create account");
-    } finally {
+      setStatus("");
       setLoading(false);
     }
   }
@@ -39,6 +42,7 @@ export function SignupForm() {
           <p className="mt-1 text-sm text-muted">Connect spending data and estimate better rewards.</p>
         </div>
         {error ? <Toast message={error} tone="error" /> : null}
+        {status ? <Toast message={status} tone="success" /> : null}
         <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
         <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Input

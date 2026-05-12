@@ -16,7 +16,7 @@ export function Navbar() {
 
   return (
     <header className="border-b border-line bg-white">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+      <div className="flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-10 xl:px-14">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <CreditCard className="h-5 w-5 text-brand" />
           Max Rewards
@@ -27,6 +27,9 @@ export function Navbar() {
           </Link>
           <Link className="rounded-md px-3 py-2 hover:bg-panel" href="/recommendations">
             Recommendations
+          </Link>
+          <Link className="rounded-md px-3 py-2 hover:bg-panel" href="/transactions">
+            Transactions
           </Link>
           <Link className="rounded-md px-3 py-2 hover:bg-panel" href="/settings">
             Settings

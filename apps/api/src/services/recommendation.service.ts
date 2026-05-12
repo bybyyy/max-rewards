@@ -7,6 +7,10 @@ export type RecommendationFilters = {
   rewardType?: string;
   studentCards?: boolean;
   includeSignupBonus?: boolean;
+  goal?: "cashback" | "travel" | "flexible";
+  welcomeBonusImportance?: "low" | "medium" | "high";
+  preferredIssuer?: string;
+  avoidedIssuer?: string;
 };
 
 type CardWithRewards = CreditCard & {
@@ -87,6 +91,7 @@ export function recommendCards(
         : 0;
       const annualFee = Number(card.annualFee);
       const estimatedNetValue = grossRewards + signupBonusValue - annualFee;
+      const preference = scorePreferences(card, filters);
 
       return {
         cardId: card.id,
@@ -97,13 +102,15 @@ export function recommendCards(
         signupBonusValue: roundMoney(signupBonusValue),
         annualFee: roundMoney(annualFee),
         estimatedNetValue: roundMoney(estimatedNetValue),
+        preferenceScore: preference.score,
+        rankingScore: roundMoney(estimatedNetValue + preference.score),
         categoryBreakdown: categoryBreakdown
           .sort((a, b) => b.estimatedRewards - a.estimatedRewards)
           .slice(0, 6),
-        reasoning: buildRecommendationReasons(card, categoryBreakdown)
+        reasoning: buildRecommendationReasons(card, categoryBreakdown).concat(preference.reasons)
       };
     })
-    .sort((a, b) => b.estimatedNetValue - a.estimatedNetValue);
+    .sort((a, b) => b.rankingScore - a.rankingScore);
 }
 
 export function applyRewardCap(
@@ -138,4 +145,44 @@ function buildRecommendationReasons(card: CardWithRewards, categoryBreakdown: Ar
   }
 
   return reasons.length > 0 ? reasons : ["This card provides a solid base reward rate across everyday spending."];
+}
+
+function scorePreferences(card: CardWithRewards, filters: RecommendationFilters) {
+  let score = 0;
+  const reasons: string[] = [];
+
+  if (filters.goal && filters.goal !== "flexible") {
+    if (card.rewardType === filters.goal) {
+      score += 75;
+      reasons.push(`Matches your preference for ${filters.goal} rewards.`);
+    } else {
+      score -= 35;
+    }
+  }
+
+  const signupBonusValue = Number(card.signupBonusValue ?? 0);
+  if (filters.welcomeBonusImportance === "high") {
+    score += signupBonusValue * 0.3;
+    if (signupBonusValue > 0) {
+      reasons.push("Welcome bonus is weighted heavily based on your questionnaire.");
+    }
+  } else if (filters.welcomeBonusImportance === "medium") {
+    score += signupBonusValue * 0.12;
+  } else if (filters.welcomeBonusImportance === "low") {
+    score -= signupBonusValue * 0.08;
+  }
+
+  const preferredIssuer = filters.preferredIssuer?.trim().toLowerCase();
+  if (preferredIssuer && card.issuer.toLowerCase().includes(preferredIssuer)) {
+    score += 100;
+    reasons.push(`Issuer preference matched: ${card.issuer}.`);
+  }
+
+  const avoidedIssuer = filters.avoidedIssuer?.trim().toLowerCase();
+  if (avoidedIssuer && card.issuer.toLowerCase().includes(avoidedIssuer)) {
+    score -= 250;
+    reasons.push(`Lower ranked because you prefer to avoid ${card.issuer}.`);
+  }
+
+  return { score: roundMoney(score), reasons };
 }

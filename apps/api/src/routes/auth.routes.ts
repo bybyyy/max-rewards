@@ -1,10 +1,14 @@
 import { Router } from "express";
 import {
   authSchema,
+  changePasswordHandler,
   loginHandler,
   logoutHandler,
   meHandler,
-  signupHandler
+  passwordSchema,
+  profileSchema,
+  signupHandler,
+  updateProfileHandler
 } from "../controllers/auth.controller.js";
 import { authRateLimiter } from "../config/security.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
@@ -17,3 +21,5 @@ authRoutes.post("/signup", authRateLimiter, validateBody(authSchema), asyncHandl
 authRoutes.post("/login", authRateLimiter, validateBody(authSchema.omit({ name: true })), asyncHandler(loginHandler));
 authRoutes.post("/logout", logoutHandler);
 authRoutes.get("/me", requireAuth, asyncHandler(meHandler));
+authRoutes.patch("/profile", requireAuth, validateBody(profileSchema), asyncHandler(updateProfileHandler));
+authRoutes.patch("/password", requireAuth, validateBody(passwordSchema), asyncHandler(changePasswordHandler));

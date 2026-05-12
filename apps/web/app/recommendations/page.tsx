@@ -16,7 +16,11 @@ const defaultFilters: RecommendationFilterState = {
   noAnnualFee: false,
   rewardType: "",
   studentCards: false,
-  includeSignupBonus: true
+  includeSignupBonus: true,
+  goal: "flexible",
+  welcomeBonusImportance: "medium",
+  preferredIssuer: "",
+  avoidedIssuer: ""
 };
 
 export default function RecommendationsPage() {
@@ -40,7 +44,10 @@ function RecommendationsContent() {
         method: "POST",
         json: {
           ...filters,
-          rewardType: filters.rewardType || undefined
+          rewardType: filters.rewardType || undefined,
+          goal: filters.goal || undefined,
+          preferredIssuer: filters.preferredIssuer || undefined,
+          avoidedIssuer: filters.avoidedIssuer || undefined
         }
       });
       setRecommendations(payload.recommendations);

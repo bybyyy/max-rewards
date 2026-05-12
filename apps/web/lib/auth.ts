@@ -25,6 +25,20 @@ export async function signup(email: string, password: string, name?: string) {
   });
 }
 
+export async function updateProfile(email: string, name?: string | null) {
+  return apiFetch<{ user: SafeUser }>("/auth/profile", {
+    method: "PATCH",
+    json: { email, name }
+  });
+}
+
+export async function changePassword(currentPassword: string, newPassword: string) {
+  return apiFetch<void>("/auth/password", {
+    method: "PATCH",
+    json: { currentPassword, newPassword }
+  });
+}
+
 export async function logout() {
   return apiFetch<void>("/auth/logout", { method: "POST" });
 }

@@ -7,7 +7,11 @@ export const recommendationFilterSchema = z.object({
   noAnnualFee: z.boolean().optional(),
   rewardType: z.string().optional(),
   studentCards: z.boolean().optional(),
-  includeSignupBonus: z.boolean().optional()
+  includeSignupBonus: z.boolean().optional(),
+  goal: z.enum(["cashback", "travel", "flexible"]).optional(),
+  welcomeBonusImportance: z.enum(["low", "medium", "high"]).optional(),
+  preferredIssuer: z.string().optional(),
+  avoidedIssuer: z.string().optional()
 });
 
 function parseFilters(query: Request["query"]) {
@@ -15,7 +19,13 @@ function parseFilters(query: Request["query"]) {
     noAnnualFee: query.noAnnualFee === "true" ? true : undefined,
     rewardType: query.rewardType ? String(query.rewardType) : undefined,
     studentCards: query.studentCards === "true" ? true : undefined,
-    includeSignupBonus: query.includeSignupBonus !== "false"
+    includeSignupBonus: query.includeSignupBonus !== "false",
+    goal: query.goal ? String(query.goal) as "cashback" | "travel" | "flexible" : undefined,
+    welcomeBonusImportance: query.welcomeBonusImportance
+      ? String(query.welcomeBonusImportance) as "low" | "medium" | "high"
+      : undefined,
+    preferredIssuer: query.preferredIssuer ? String(query.preferredIssuer) : undefined,
+    avoidedIssuer: query.avoidedIssuer ? String(query.avoidedIssuer) : undefined
   };
 }
 
