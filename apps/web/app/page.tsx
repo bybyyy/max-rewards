@@ -27,7 +27,10 @@ export default function LandingPage() {
     <main className="min-h-screen overflow-hidden bg-[#fbfaff] text-[#11143f]">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-5 py-6 lg:px-10">
         <div className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-500 text-white shadow-lg shadow-violet-200">
+          <span
+            className="grid h-10 w-10 place-items-center rounded-2xl text-white shadow-lg shadow-violet-200"
+            style={{ background: "linear-gradient(135deg, #7c3aed, #4f46e5)", color: "#ffffff" }}
+          >
             <CreditCard className="h-5 w-5" />
           </span>
           <span className="text-xl font-bold">Max Rewards</span>
@@ -43,7 +46,8 @@ export default function LandingPage() {
             Sign in
           </button>
           <button
-            className="rounded-xl bg-gradient-to-r from-violet-600 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-200"
+            className="rounded-xl px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-200"
+            style={{ background: "linear-gradient(90deg, #7c3aed, #4f46e5)", color: "#ffffff" }}
             onClick={() => setAuthMode("signup")}
           >
             Sign up
@@ -66,7 +70,8 @@ export default function LandingPage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <button
-              className="inline-flex h-14 items-center rounded-xl bg-gradient-to-r from-violet-600 to-indigo-500 px-7 text-sm font-semibold text-white shadow-xl shadow-violet-200"
+              className="inline-flex h-14 items-center rounded-xl px-7 text-sm font-semibold text-white shadow-xl shadow-violet-200"
+              style={{ background: "linear-gradient(90deg, #7c3aed, #4f46e5)", color: "#ffffff" }}
               onClick={() => setAuthMode("signup")}
             >
               Sign up for free
@@ -87,7 +92,10 @@ export default function LandingPage() {
         </div>
 
         <div className="relative min-h-[560px]">
-          <div className="absolute inset-x-0 bottom-0 h-[360px] rounded-t-[45%] bg-gradient-to-tr from-violet-100 via-white to-indigo-100" />
+          <div
+            className="absolute inset-x-0 bottom-0 h-[360px] rounded-t-[45%]"
+            style={{ background: "linear-gradient(35deg, #ede9fe, #ffffff 54%, #e0e7ff)" }}
+          />
           <img
             className="absolute bottom-0 right-0 h-[380px] w-[72%] rounded-t-[160px] object-cover object-center opacity-95"
             src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=1200&q=80"
@@ -97,7 +105,10 @@ export default function LandingPage() {
             <Plane className="h-8 w-8" />
           </div>
           <div className="absolute right-16 top-44 h-64 w-44 rotate-[7deg] rounded-3xl bg-[#111827] p-5 text-white shadow-2xl">
-            <div className="h-7 w-9 rounded-md bg-gradient-to-br from-yellow-200 to-yellow-500" />
+            <div
+              className="h-7 w-9 rounded-md"
+              style={{ background: "linear-gradient(135deg, #fef08a, #eab308)" }}
+            />
             <p className="mt-24 text-2xl font-semibold tracking-widest">VISA</p>
             <p className="text-xs text-slate-300">Signature</p>
           </div>
@@ -109,7 +120,10 @@ export default function LandingPage() {
                 <p className="text-3xl font-bold">$2,740</p>
                 <p className="text-xs font-semibold text-emerald-500">+ $560 this month</p>
               </div>
-              <div className="h-20 w-28 rounded-2xl bg-gradient-to-br from-violet-300 via-indigo-100 to-slate-50" />
+              <div
+                className="h-20 w-28 rounded-2xl"
+                style={{ background: "linear-gradient(135deg, #c4b5fd, #e0e7ff 55%, #f8fafc)" }}
+              />
             </div>
             <div className="mt-8 space-y-4">
               {[
@@ -169,7 +183,10 @@ export default function LandingPage() {
           <Feature icon={BarChart3} title="Track and optimize" text="Review categories and transactions from linked accounts." />
           <Feature icon={Plane} title="Unlock travel value" text="Turn points and card rewards into higher-value trips." />
         </div>
-        <div className="mt-14 rounded-3xl bg-gradient-to-r from-violet-100 via-white to-indigo-100 p-8 shadow-sm">
+        <div
+          className="mt-14 rounded-3xl p-8 shadow-sm"
+          style={{ background: "linear-gradient(90deg, #ede9fe, #ffffff 55%, #e0e7ff)" }}
+        >
           <div className="grid items-center gap-6 md:grid-cols-[160px_1fr]">
             <img
               className="h-32 w-32 rounded-full object-cover"
@@ -204,7 +221,10 @@ function MiniValue({ icon: Icon, text }: { icon: typeof Gift; text: string }) {
 function Feature({ icon: Icon, title, text }: { icon: typeof Gift; title: string; text: string }) {
   return (
     <div className="text-center">
-      <span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-violet-100 to-white text-violet-600 shadow-sm">
+      <span
+        className="mx-auto grid h-16 w-16 place-items-center rounded-2xl text-violet-600 shadow-sm"
+        style={{ background: "linear-gradient(135deg, #ede9fe, #ffffff)" }}
+      >
         <Icon className="h-7 w-7" />
       </span>
       <h3 className="mt-5 font-bold">{title}</h3>
