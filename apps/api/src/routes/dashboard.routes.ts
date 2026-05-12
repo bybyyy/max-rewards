@@ -5,12 +5,13 @@ import {
   spendingByCategoryHandler,
   topMerchantsHandler
 } from "../controllers/dashboard.controller.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 import { requireAuth } from "../middleware/authMiddleware.js";
 
 export const dashboardRoutes = Router();
 
 dashboardRoutes.use(requireAuth);
-dashboardRoutes.get("/summary", dashboardSummaryHandler);
-dashboardRoutes.get("/spending-by-category", spendingByCategoryHandler);
-dashboardRoutes.get("/monthly-trends", monthlyTrendsHandler);
-dashboardRoutes.get("/top-merchants", topMerchantsHandler);
+dashboardRoutes.get("/summary", asyncHandler(dashboardSummaryHandler));
+dashboardRoutes.get("/spending-by-category", asyncHandler(spendingByCategoryHandler));
+dashboardRoutes.get("/monthly-trends", asyncHandler(monthlyTrendsHandler));
+dashboardRoutes.get("/top-merchants", asyncHandler(topMerchantsHandler));

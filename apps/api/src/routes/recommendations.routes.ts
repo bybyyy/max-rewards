@@ -5,12 +5,17 @@ import {
   recommendationHistoryHandler,
   runRecommendationsHandler
 } from "../controllers/recommendations.controller.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 import { requireAuth } from "../middleware/authMiddleware.js";
 import { validateBody } from "../middleware/validateRequest.js";
 
 export const recommendationsRoutes = Router();
 
 recommendationsRoutes.use(requireAuth);
-recommendationsRoutes.get("/", getRecommendationsHandler);
-recommendationsRoutes.post("/run", validateBody(recommendationFilterSchema), runRecommendationsHandler);
-recommendationsRoutes.get("/history", recommendationHistoryHandler);
+recommendationsRoutes.get("/", asyncHandler(getRecommendationsHandler));
+recommendationsRoutes.post(
+  "/run",
+  validateBody(recommendationFilterSchema),
+  asyncHandler(runRecommendationsHandler)
+);
+recommendationsRoutes.get("/history", asyncHandler(recommendationHistoryHandler));
