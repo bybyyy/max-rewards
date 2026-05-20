@@ -89,16 +89,31 @@ model CreditCard {
   id                    String   @id @default(uuid())
   name                  String
   issuer                String
+  network               String?
   annualFee             Decimal  @db.Decimal(10, 2)
   rewardType            String
+  rewardCurrency        String   @default("cash")
+  baseRate              Decimal  @default(0.0100) @db.Decimal(6, 4)
+  pointValueCents       Decimal? @db.Decimal(8, 4)
+  rewardRules           Json     @default("{}")
+  categoryCaps          Json     @default("{}")
+  credits               Json     @default("[]")
+  signupBonus           Json?
   signupBonusValue      Decimal? @db.Decimal(10, 2)
   foreignTransactionFee Decimal? @db.Decimal(10, 2)
   isStudentCard         Boolean  @default(false)
   hasNoAnnualFee        Boolean  @default(false)
+  bestFor               String[] @default([])
+  applyUrl              String?
+  sourceUrl             String?
+  lastVerified          DateTime? @db.Date
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 
   rewardCategories CardRewardCategory[]
+
+  @@index([issuer])
+  @@index([rewardType])
 }
 
 model CardRewardCategory {

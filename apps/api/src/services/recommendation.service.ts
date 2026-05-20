@@ -67,6 +67,7 @@ export function recommendCards(
       const categoryBreakdown = Object.entries(spending).map(([category, annualSpend]) => {
         const rule =
           card.rewardCategories.find((reward) => reward.category === category) ??
+          card.rewardCategories.find((reward) => reward.category === "other") ??
           card.rewardCategories.find((reward) => reward.category === "default");
 
         const rewardRate = Number(rule?.rewardRate ?? 0.01);
@@ -97,7 +98,13 @@ export function recommendCards(
         cardId: card.id,
         name: card.name,
         issuer: card.issuer,
+        network: card.network,
         rewardType: card.rewardType,
+        rewardCurrency: card.rewardCurrency,
+        bestFor: card.bestFor,
+        applyUrl: card.applyUrl,
+        sourceUrl: card.sourceUrl,
+        lastVerified: card.lastVerified?.toISOString().slice(0, 10) ?? null,
         estimatedGrossRewards: roundMoney(grossRewards),
         signupBonusValue: roundMoney(signupBonusValue),
         annualFee: roundMoney(annualFee),

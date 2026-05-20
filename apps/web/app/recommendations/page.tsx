@@ -8,7 +8,6 @@ import {
   type RecommendationFilterState
 } from "@/components/recommendations/RecommendationFilters";
 import { RecommendationCard, type Recommendation } from "@/components/recommendations/RecommendationCard";
-import { CurrentVsRecommended } from "@/components/recommendations/CurrentVsRecommended";
 import { Toast } from "@/components/ui/Toast";
 import { apiFetch } from "@/lib/apiClient";
 
@@ -69,7 +68,6 @@ function RecommendationsContent() {
       </div>
       <RecommendationFilters filters={filters} setFilters={setFilters} onRun={run} />
       {error ? <Toast message={error} tone="error" /> : null}
-      <CurrentVsRecommended />
       <div className="space-y-4">
         {recommendations.map((recommendation, index) => (
           <RecommendationCard

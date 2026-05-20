@@ -58,10 +58,11 @@ Sensitive Plaid access tokens are encrypted before storage and never sent to the
 
 ## MVP Notes
 
-- Card data is manually seeded sample data for portfolio demonstration.
-- Reward estimates are cashback-equivalent values.
-- The app does not provide financial advice, approval odds, or live card application flows.
+- Card data is a manually maintained demo catalog with issuer source links and verification dates.
+- Reward estimates are cashback-equivalent values based on normalized reward categories and user spending aggregates.
+- The app does not provide financial advice, approval odds, or live application flows.
 - Plaid Sandbox is the intended development environment.
+- Before demoing a refreshed catalog, run the migration, seed, test, and build checks listed below.
 
 ## Useful Scripts
 
